@@ -52,10 +52,26 @@ void add(username){
   showMenu(username);
 }
 
-void delete(username){
-  // delete an expense
+void delete(String username) async {
+  print("===== Delete an item =====");
+  stdout.write("Item id: ");
+  String? id = stdin.readLineSync()?.trim();
 
-  // loop the menu
+  if (id == null || id.isEmpty) {
+    print("Invalid id.");
+    showMenu(username);
+    return;
+  }
+
+  final url = Uri.parse('http://localhost:3000/deleteexpense/$id?username=$username');
+  final response = await http.delete(url);
+
+  if (response.statusCode == 200) {
+    print("Deleted!");
+  } else {
+    print("Failed: ${response.body}");
+  }
+
   showMenu(username);
 }
 
