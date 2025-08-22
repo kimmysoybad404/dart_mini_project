@@ -9,12 +9,41 @@ void main() async {
   await login();
 }
 
-void search(username){
-  // search expense
+void search(username) async {
+  stdout.write("Item to search: ");
+  String? keyword = stdin.readLineSync()?.trim();
+  if (keyword == null || keyword.isEmpty) {
+    print("No keyword entered.");
+    showMenu(username);
+    return;
+  }
 
-  // loop the menu
+  final url = Uri.parse(
+      'http://localhost:3000/searchexpense?username=$username&keyword=$keyword');
+  final response = await http.get(url);
+
+  if (response.statusCode != 200) {
+    print('Failed to search expenses!');
+    showMenu(username);
+    return;
+  }
+
+  final jsonResult = json.decode(response.body) as List;
+
+  if (jsonResult.isEmpty) {
+    print("No item: $keyword");
+  } else {
+    for (var exp in jsonResult) {
+      final dt = DateTime.parse(exp['date']);
+      final dtLocal = dt.toLocal();
+
+      print(
+          "${exp['id']}. ${exp['item']} : ${exp['paid']}฿ @ ${dtLocal.toString()}");
+    }
+  }
   showMenu(username);
 }
+
 
 void add(username){
   // add expense
@@ -23,10 +52,26 @@ void add(username){
   showMenu(username);
 }
 
-void delete(username){
-  // delete an expense
+void delete(String username) async {
+  print("===== Delete an item =====");
+  stdout.write("Item id: ");
+  String? id = stdin.readLineSync()?.trim();
 
-  // loop the menu
+  if (id == null || id.isEmpty) {
+    print("Invalid id.");
+    showMenu(username);
+    return;
+  }
+
+  final url = Uri.parse('http://localhost:3000/deleteexpense/$id?username=$username');
+  final response = await http.delete(url);
+
+  if (response.statusCode == 200) {
+    print("Deleted!");
+  } else {
+    print("Failed: ${response.body}");
+  }
+
   showMenu(username);
 }
 
