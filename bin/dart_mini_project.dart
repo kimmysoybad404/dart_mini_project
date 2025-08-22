@@ -70,6 +70,7 @@ void showexpense(username, select) async {
 void showMenu(username) {
   print(
     "========== Expense Tracking App ==========\n"
+    "Welcome $username\n"
     "1. Show all\n"
     "2. Today's expense\n"
     "3. Search expense\n"
