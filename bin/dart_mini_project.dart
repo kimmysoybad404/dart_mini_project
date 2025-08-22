@@ -71,7 +71,7 @@ void showMenu(username) {
   print(
     "========== Expense Tracking App ==========\n"
     "Welcome $username\n"
-    "1. Show all\n"
+    "1. All expenses\n"
     "2. Today's expense\n"
     "3. Search expense\n"
     "4. Add new expense\n"
