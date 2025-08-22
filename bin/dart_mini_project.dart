@@ -9,43 +9,14 @@ void main() async {
   await login();
 }
 
-void search(username) async {
-  stdout.write("Item to search: ");
-  String? keyword = stdin.readLineSync()?.trim();
-  if (keyword == null || keyword.isEmpty) {
-    print("No keyword entered.");
-    showMenu(username);
-    return;
-  }
+void search(username){
+  // search expense
 
-  final url = Uri.parse(
-      'http://localhost:3000/searchexpense?username=$username&keyword=$keyword');
-  final response = await http.get(url);
-
-  if (response.statusCode != 200) {
-    print('Failed to search expenses!');
-    showMenu(username);
-    return;
-  }
-
-  final jsonResult = json.decode(response.body) as List;
-
-  if (jsonResult.isEmpty) {
-    print("No item: $keyword");
-  } else {
-    for (var exp in jsonResult) {
-      final dt = DateTime.parse(exp['date']);
-      final dtLocal = dt.toLocal();
-
-      print(
-          "${exp['id']}. ${exp['item']} : ${exp['paid']}฿ @ ${dtLocal.toString()}");
-    }
-  }
+  // loop the menu
   showMenu(username);
 }
 
-
-void add(username) {
+void add(username){
   // add expense
 
   // loop the menu
