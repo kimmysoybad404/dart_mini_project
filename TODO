@@ -3,11 +3,14 @@ https://docs.google.com/document/d/1DD6BbooUXRUS7PbWWvVoQOc_ebi8WsfGAv3eVCklOG0/
 [Progress] Search function(Dev Tor)
            -in .dart print ui from teacher document
            -in app.js do service to make it work
+           -Do in search-function branch
 
 [Progress] Add function(Dev Gun)
            -in .dart print ui from teacher document
            -in app.js do service to make it work
+           -Do in add-function branch
 
-[Progress] Add function(Dev Ford)
+[Progress] Delete function(Dev Ford)
            -in .dart print ui from teacher document
            -in app.js do service to make it work
+           -Do in delete-function branch
