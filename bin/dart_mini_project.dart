@@ -44,8 +44,44 @@ void search(username) async {
   showMenu(username);
 }
 
-void add(username){
+Future<void> add(String username) async {
   // add expense
+  print("===== Add new item =====");
+  stdout.write("Item: ");
+  String? item = stdin.readLineSync()?.trim();
+  stdout.write("Paid: ");
+  String? paidStr = stdin.readLineSync()?.trim();
+
+  if (item == null || paidStr == null || item.isEmpty || paidStr.isEmpty) {
+    print("Incomplete input");
+    showMenu(username);
+    return;
+  }
+
+  final paid = int.tryParse(paidStr);
+  if (paid == null) {
+    print("Paid must be a number");
+    showMenu(username);
+    return;
+  }
+
+  final body = {"username": username, "item": item, "paid": paid.toString()};
+  final url = Uri.parse('http://localhost:3000/addexpense');
+
+  try {
+    final response = await http.post(url, body: body);
+    if (response.statusCode == 200) {
+      print(response.body);
+    } else if (response.statusCode == 404) {
+      print("User not found.");
+    } else if (response.statusCode == 500) {
+      print("Database server error");
+    } else {
+      print("Unknown error");
+    }
+  } catch (e) {
+    print("Request failed: $e");
+  }
 
   // loop the menu
   showMenu(username);
