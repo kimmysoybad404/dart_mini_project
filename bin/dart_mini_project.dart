@@ -9,61 +9,77 @@ void main() async {
   await login();
 }
 
-void search(username){
+void search(username) {
   // search expense
 
   // loop the menu
   showMenu(username);
 }
 
-void add(username){
+void add(username) {
   // add expense
 
   // loop the menu
   showMenu(username);
 }
 
-void delete(username){
-  // delete an expense
+void delete(String username) async {
+  print("===== Delete an item =====");
+  stdout.write("Item id: ");
+  String? id = stdin.readLineSync()?.trim();
 
-  // loop the menu
+  if (id == null || id.isEmpty) {
+    print("Invalid id.");
+    showMenu(username);
+    return;
+  }
+
+  final url = Uri.parse('http://localhost:3000/deleteexpense/$id?username=$username');
+  final response = await http.delete(url);
+
+  if (response.statusCode == 200) {
+    print("Deleted!");
+  } else {
+    print("Failed: ${response.body}");
+  }
+
   showMenu(username);
 }
 
-// show all expense and Today's expense function 
+// show all expense and Today's expense function
 void showexpense(username, select) async {
   String text;
-  if(select == 0){
+  if (select == 0) {
     text = "expense";
-  }else{
+  } else {
     text = "todayexpense";
   }
 
   final url = Uri.parse('http://localhost:3000/$text?username=$username');
-        final response = await http.get(url);
-        if (response.statusCode != 200) {
-          print('Failed to retrieve the http package!');
-          return;
-        }
-        // the body is JSON string
-        final jsonResult = json.decode(response.body) as List;
+  final response = await http.get(url);
+  if (response.statusCode != 200) {
+    print('Failed to retrieve the http package!');
+    return;
+  }
+  // the body is JSON string
+  final jsonResult = json.decode(response.body) as List;
 
-        int total = 0;
-        List topics = ["All expenses", "Today's expenses"];
-        final topic = topics[select];
-        print("------------- $topic ----------");
-        for (var exp in jsonResult) {
-          final dt = DateTime.parse(exp['date']);
-          final dtLocal = dt.toLocal();
+  int total = 0;
+  List topics = ["All expenses", "Today's expenses"];
+  final topic = topics[select];
+  print("------------- $topic ----------");
+  for (var exp in jsonResult) {
+    final dt = DateTime.parse(exp['date']);
+    final dtLocal = dt.toLocal();
 
-          print(
-            "${exp['id']}. ${exp['item']} : ${exp['paid']}฿ @ ${dtLocal.toString()}",
-          );
+    print(
+      "${exp['id']}. ${exp['item']} : ${exp['paid']}฿ @ ${dtLocal.toString()}",
+    );
 
-          total += exp['paid'] as int;
-        }
-        print("Total expenses = $total฿");
-        showMenu(username);
+    total += exp['paid'] as int;
+  }
+  print("Total expenses = $total฿");
+  showMenu(username);
 }
 
 // menu function
