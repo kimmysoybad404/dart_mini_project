@@ -9,6 +9,7 @@ void main() async {
   await login();
 }
 
+
 void search(username) async {
   stdout.write("Item to search: ");
   String? keyword = stdin.readLineSync()?.trim();
@@ -17,7 +18,7 @@ void search(username) async {
     showMenu(username);
     return;
   }
-
+  
   final url = Uri.parse(
       'http://localhost:3000/searchexpense?username=$username&keyword=$keyword');
   final response = await http.get(url);
@@ -43,6 +44,7 @@ void search(username) async {
   }
   showMenu(username);
 }
+
 
 Future<void> add(String username) async {
   // add expense
@@ -86,7 +88,6 @@ Future<void> add(String username) async {
   // loop the menu
   showMenu(username);
 }
-
 
 void delete(String username) async {
   print("===== Delete an item =====");
